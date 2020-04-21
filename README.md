@@ -35,7 +35,7 @@ given census block group.
 
 We use a Bayesian multilevel negative binomial regression model for
 the number of deaths each day, and implement the model in R using
-the `[rstanarm]` package.
+the `[rstanarm][rstanarm]` package.
 
 ## Technical report
 
