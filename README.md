@@ -30,12 +30,12 @@ social-distancing measures on ``flattening the curve.''  SafeGraph is
 a data company that aggregates anonymized location data from numerous
 applications in order to provide insights about physical places. To
 enhance privacy, SafeGraph excludes census block group information if
-fewer than five devices visitedan establishment in a month from a
+fewer than five devices visited an establishment in a month from a
 given census block group.
 
 We use a Bayesian multilevel negative binomial regression model for
-the number of deaths each day, and implement the model in R using the
-[`rstanarm`][rstanarm] package.
+the number of deaths each day, and implement the model in R using
+the [`rstanarm`][rstanarm] package.
 
 ## Technical report
 
