@@ -24,7 +24,7 @@ We use daily data on COVID-19 deaths, together with mobile-phone data that allow
 ### What data sources do you use?
 
 To train our model, we use daily mortality data aggregated by the [New
-York Times][nytimes].
+York Times][nytimes].  
 
 For each US state, we use local data from mobile-phone GPS traces made
 available by [SafeGraph] to quantify the changing impact of
@@ -32,9 +32,40 @@ social-distancing measures on "flattening the curve."  SafeGraph is
 a data company that aggregates anonymized location data from numerous
 applications in order to provide insights about physical places.
 
+An important caveat is that The New York Times data set only reports confirmed COVID-19 deaths; if this data underestimates _true_ COVID-19 deaths, then our model will, too---probably by a similar amount.  
+
 ### Can you explain a bit more about how your model works?  What signals are you finding in the data?  
 
-The model works by learning statistical associations between death rates and the timing/extent of social distancing behavior in each state.  At a high level, the data show a clear pattern: states that have been more successful in flattening the curve seem to be those whose residents practiced social distancing more aggressively, and further in advance of when their state's death rate started to rise.  Our model learns the quantitative details of that relationship and uses it to extrapolate probable future death rates from currently observed death rates.  
+The model works by learning statistical associations between death rates and the timing/extent of social distancing behavior in each state.  The data show a clear pattern: states that have been more successful in flattening the curve seem to be those whose residents practiced social distancing more aggressively, and further in advance of when their state's death rate started to rise.  For example, take the cases of New York and Massachusetts.  New York was seeing about 100 deaths per day on March 27:
+
+![](fig/NY-zoom.png)
+
+Meanwhile, Massachusetts hit about 100 deaths per day on April 7th:
+
+![](fig/MA-zoom.png)  
+
+But that's where the two states' trajectories diverged signficantly.  New York's death rate shot tragically upward:
+
+![](fig/NY.png)
+
+While deaths in Massachusetts grew at a much slower pace from that point:
+
+![](fig/MA.png)
+
+The difference was the timing of social distancing, which we see clearly in the SafeGraph data.  In New York, distancing behavior didn't take hold until after death rates had reached 1 per 3 million people (vertical line in plot below), by which point the epidemic was already widespread:
+
+![](fig/sdmetrics_NY.png)
+
+The vertical axis shows changes in visitation patterns to various points of interest (note: the "museums" category also includes parks).  -0.5 is equivalent to a 50% reduction over the January/February baseline.
+
+In Massachusetts, social distancing began in earnest around the same time in calendar days as it did in New York: about March 15. However, the epidemic wasn't as advanced in Massachusetts, where death rates didn't hit 1 per 3 million residents until a week later, on March 22:
+
+![](fig/sdmetrics_MA.png)
+
+Thus in "epidemic days," if not in actual calendar days, residents of Massachusetts practiced social distancing earlier than residents of New York did.  This seemed to have made all the difference in flattening the curve.  
+
+This example shows you how there's a relationship between the timing and extent of social distancing behavior and the severity of a state's death rate.  Our model learns the quantitative details of that relationship and uses it to extrapolate probable future death rates from currently observed death rates.  
+
 
 ### Can your model tell us what would happen if social-distancing measures were relaxed?
 
@@ -50,12 +81,23 @@ There are tradeoffs, and we think that both types of models have a role to play 
 
 ### Why do you model deaths rather than hospitalizations or cases?
 
-Hospitalizations data isn't broadly available, and cases data is confounded by large geographic differences in the availability of testing.  Deaths, while almost surely under-reported to some degree, are generally viewed as being a more reliable data set.  
+Hospitalizations data isn't broadly available, and cases data is confounded by large geographic differences in the availability of testing.  Deaths, while almost surely under-reported to some degree, are generally viewed as being a more reliable data set.
 
 
-## Where can I find more details?
+### I've noticed that some of the error bars on your forecasts are pretty wide.  Why is that?
 
-If you want to get technical, we use a Bayesian multilevel negative binomial regression model for the number of deaths each day, and we implement the model in R using the [`rstanarm`][rstanarm] package.  For more details, see our [technical report].
+Mostly because future death rates really are uncertain in a lot of areas.  The error bars from our model are going to be wide in any state or city where the available data on deaths, together with the observed timing and extent of social distancing patterns, cannot rule out future growth in the death rate.
+
+There are a couple of other points to consider here.  First, our model does err a bit on the side of conservatism: in a two-week back test, where we fit the model using data through the first week of April and then made predictions for the subsequent two weeks, our model's 95% error bars covered 98% of the notionally "future" data points. 
+
+Second, there are a lot of things our model doesn't "know" about.  In particular, it doesn't use recent data on cases (because the data are difficult to interpret in light of variation in testing availability) or hospitalizations (because the data aren't widely available).  So we'd encourage you to think about our projections as representing a range of plausible scenarios in the absence of any knowledge of recent case/hospitalization trends in your area.  If you know, for example, that hospitalizations in your area have flattened off, then you're likely to see death rates more on the lower end of our error bars.  If hospitalizations are still growing, you're more likely to see death rates on the upper end of (or even beyond) our error bars.  
+
+
+
+
+### Where can I find more details?
+
+We use a Bayesian multilevel negative binomial regression model for the number of deaths each day, and we implement the model in R using the [`rstanarm`][rstanarm] package.  UYou can read all about it in our [technical report].
 
 
 
