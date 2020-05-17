@@ -4,6 +4,7 @@
 Daily COVID-19 mortality projections at state and national levels from
 the [UT-Austin COVID-19 Modeling Consortium][consortium].
 
+
 ## Data source change as of 2020-05-07 TUE
 
 **NOTE**: On May 7, 2020 the New York Times’ made substantial changes
@@ -12,6 +13,12 @@ York state in particular.  We are working our way through the
 implications of these changes for our model.  In the meantime, we are
 using data from Johns Hopkins University, which includes both probable
 and confirmed deaths, to inform our projections
+
+## Change credible intervals from 90% to 95%
+
+As of 2020-05-18, we will be reporting 95% credible intervals rather
+than 90% credible intervals
+
 
 ## Interactive display with daily updates
 
