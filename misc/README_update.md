@@ -1,21 +1,4 @@
 
-# UT-Austin forecast for COVID-19 mortality in the US
-
-Daily COVID-19 mortality projections at state and national levels from
-the [UT-Austin COVID-19 Modeling Consortium][consortium].
-
-## Interactive display with daily updates
-
-[You can see interactive display of our daily forecasts on our website][forecasts]
-
-## Contents
-
-- `forecasts/` contains our latest mortality forecasts for states and
-  the US.
-- `forecasts/archive/` contains daily snapshot forecasts of mortality
-  from past days.
-
-
 ## About the model: FAQ
 
 ### What does the model do?
